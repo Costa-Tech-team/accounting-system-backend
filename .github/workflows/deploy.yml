@@ -45,7 +45,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
           script: |
-            cd /var/www/ferchosistemas
+            ssh-add ~/.ssh/id_ed25519_accounting-system
+            cd /var/www/accountingsystem
 
             git pull origin main
 
