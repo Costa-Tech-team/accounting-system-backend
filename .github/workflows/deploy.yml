@@ -18,6 +18,9 @@ jobs:
         with:
           php-version: 8.4
 
+      - name: Install PHP dependencies
+        run: composer install --no-progress --prefer-dist
+
       - name: Prepare Laravel
         run: |
           cp .env.example .env
