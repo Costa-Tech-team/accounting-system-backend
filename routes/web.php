@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -8,3 +9,6 @@ Route::get('/', function () {
         "version" => "Beta"
     ]);
 });
+
+// Auth Routes
+Route::post('/login', [AuthController::class, 'login'])->name('login');
