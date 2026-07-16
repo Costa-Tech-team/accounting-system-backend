@@ -31,7 +31,7 @@ class AuthTest extends TestCase
         ]);
 
         // --- Act ---
-        $response = $this->postJson('/login', [
+        $response = $this->postJson('/api/login', [
             'email' => 'fernandomatiaspessoa471@gmail.com',
             'password' => 'password',
         ]);
@@ -69,7 +69,7 @@ class AuthTest extends TestCase
         ]);
 
         // --- Act ---
-        $response = $this->postJson('/login', [
+        $response = $this->postJson('/api/login', [
             'email' => 'fernandomatiaspessoa471@gmail.com',
             'password' => 'password_incorrecto',
         ]);
@@ -100,7 +100,7 @@ class AuthTest extends TestCase
             'email_verified_at' => now(),
         ]);
 
-        $loginResponse = $this->postJson('/login', [
+        $loginResponse = $this->postJson('/api/login', [
             'email' => 'fernandomatiaspessoa471@gmail.com',
             'password' => 'password',
         ]);

@@ -10,5 +10,3 @@ Route::get('/', function () {
     ]);
 });
 
-// Auth Routes
-Route::post('/login', [AuthController::class, 'login'])->name('login');
