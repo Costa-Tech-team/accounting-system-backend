@@ -40,8 +40,9 @@ class RegisterCompleteController extends Controller
             'name' => $name,
             'email' => $email,
             'password' => Hash::make($request->password),
-            'email_verified_at' => now(),
         ]);
+
+        $user->markEmailAsVerified();
 
         return response()->json([
             "message" => "Usuario registrado con exito",
