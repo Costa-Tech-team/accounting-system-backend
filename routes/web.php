@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegisterCompleteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,3 +10,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/auth/register/complete', [RegisterCompleteController::class, 'showForm'])
+    ->name('register.complete')
+    ->middleware('signed');
+
+Route::post('/auth/register/complete', [RegisterCompleteController::class, 'store'])
+    ->name('register.complete.store')
+    ->middleware('signed');
