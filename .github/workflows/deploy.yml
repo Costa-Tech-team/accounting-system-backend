@@ -18,8 +18,20 @@ jobs:
         with:
           php-version: 8.4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
       - name: Install PHP dependencies
         run: composer install --no-progress --prefer-dist
+
+      - name: Install Node deps
+        run: npm install
+
+      - name: Build assets
+        run: npm run build
 
       - name: Prepare Laravel
         run: |
