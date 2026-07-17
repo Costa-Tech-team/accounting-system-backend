@@ -17,6 +17,14 @@ class RegisterCompleteController extends Controller
         $email = $request->query('email');
         $name = $request->query('name');
 
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            return response()->json([
+                'status' => 'Esta cuenta ya está registrada.'
+            ], 403);
+        }
+
         return view('auth.complete-register', compact('email', 'name'));
     }
 
