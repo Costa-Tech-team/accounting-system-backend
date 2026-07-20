@@ -19,7 +19,6 @@ class AccountSeeder extends Seeder
         $ingresos = AccountType::where('name', 'Ingresos')->first();
         $gastos = AccountType::where('name', 'Gastos')->first();
 
-
         // ACTIVO
 
         $activoRoot = Account::create([
@@ -27,6 +26,7 @@ class AccountSeeder extends Seeder
             'code' => '1',
             'name' => 'Activo',
             'is_active' => true,
+            'is_operable' => false,
         ]);
 
         $activoCorriente = Account::create([
@@ -35,6 +35,7 @@ class AccountSeeder extends Seeder
             'code' => '1.1',
             'name' => 'Activo Corriente',
             'is_active' => true,
+            'is_operable' => false,
         ]);
 
         Account::create([
@@ -43,6 +44,7 @@ class AccountSeeder extends Seeder
             'code' => '1.1.1',
             'name' => 'Caja',
             'is_active' => true,
+            'is_operable' => true,
         ]);
 
         Account::create([
@@ -51,8 +53,8 @@ class AccountSeeder extends Seeder
             'code' => '1.1.2',
             'name' => 'Banco',
             'is_active' => true,
+            'is_operable' => true,
         ]);
-
 
         // PASIVO
 
@@ -61,6 +63,7 @@ class AccountSeeder extends Seeder
             'code' => '2',
             'name' => 'Pasivo',
             'is_active' => true,
+            'is_operable' => false,
         ]);
 
         Account::create([
@@ -69,28 +72,46 @@ class AccountSeeder extends Seeder
             'code' => '2.1',
             'name' => 'Proveedores',
             'is_active' => true,
+            'is_operable' => true,
         ]);
-
 
         // PATRIMONIO NETO
 
-        Account::create([
+        $patrimonioRoot = Account::create([
             'account_type_id' => $patrimonio->id,
             'code' => '3',
             'name' => 'Patrimonio Neto',
             'is_active' => true,
+            'is_operable' => false,
         ]);
 
+        Account::create([
+            'account_type_id' => $patrimonio->id,
+            'parent_id' => $patrimonioRoot->id,
+            'code' => '3.1',
+            'name' => 'Capital',
+            'is_active' => true,
+            'is_operable' => true,
+        ]);
 
         // INGRESOS
 
-        Account::create([
+        $ingresosRoot = Account::create([
             'account_type_id' => $ingresos->id,
             'code' => '4',
-            'name' => 'Ventas',
+            'name' => 'Ingresos',
             'is_active' => true,
+            'is_operable' => false,
         ]);
 
+        Account::create([
+            'account_type_id' => $ingresos->id,
+            'parent_id' => $ingresosRoot->id,
+            'code' => '4.1',
+            'name' => 'Ventas',
+            'is_active' => true,
+            'is_operable' => true,
+        ]);
 
         // GASTOS
 
@@ -99,6 +120,7 @@ class AccountSeeder extends Seeder
             'code' => '5',
             'name' => 'Gastos',
             'is_active' => true,
+            'is_operable' => false,
         ]);
 
         Account::create([
@@ -107,6 +129,7 @@ class AccountSeeder extends Seeder
             'code' => '5.1',
             'name' => 'Servicios',
             'is_active' => true,
+            'is_operable' => true,
         ]);
 
         Account::create([
@@ -115,6 +138,7 @@ class AccountSeeder extends Seeder
             'code' => '5.2',
             'name' => 'Sueldos',
             'is_active' => true,
+            'is_operable' => true,
         ]);
     }
 }

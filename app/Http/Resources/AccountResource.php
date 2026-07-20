@@ -27,6 +27,7 @@ class AccountResource extends JsonResource
             }),
             'parent_id' => $this->parent_id,
             'is_active' => $this->is_active,
+            'is_operable' => $this->is_operable,
 
             'children' => AccountResource::collection(
                 $this->whenLoaded('childrenRecursive')
