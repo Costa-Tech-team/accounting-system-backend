@@ -28,5 +28,7 @@ Route::prefix('/v1')->group(function () {
 
         // Accounting System Core Routes
         Route::get('/account', [AccountController::class, 'index']);
+        Route::get('/account/{id}', [AccountController::class, 'show']);
+        Route::post('/account', [AccountController::class, 'store']);
     });
 });

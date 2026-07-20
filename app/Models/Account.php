@@ -18,6 +18,7 @@ class Account extends Model
         'code',
         'name',
         'is_active',
+        'is_operable',
     ];
 
     protected $hidden = [
