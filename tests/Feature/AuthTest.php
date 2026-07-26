@@ -31,7 +31,7 @@ class AuthTest extends TestCase
         ]);
 
         // --- Act ---
-        $response = $this->postJson('/api/login', [
+        $response = $this->postJson('/api/v1/login', [
             'email' => 'fernandomatiaspessoa471@gmail.com',
             'password' => 'password',
         ]);
@@ -69,7 +69,7 @@ class AuthTest extends TestCase
         ]);
 
         // --- Act ---
-        $response = $this->postJson('/api/login', [
+        $response = $this->postJson('/api/v1/login', [
             'email' => 'fernandomatiaspessoa471@gmail.com',
             'password' => 'password_incorrecto',
         ]);
@@ -100,7 +100,7 @@ class AuthTest extends TestCase
             'email_verified_at' => now(),
         ]);
 
-        $loginResponse = $this->postJson('/api/login', [
+        $loginResponse = $this->postJson('/api/v1/login', [
             'email' => 'fernandomatiaspessoa471@gmail.com',
             'password' => 'password',
         ]);
@@ -111,7 +111,7 @@ class AuthTest extends TestCase
         // --- Act ---
         $logoutResponse = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->postJson('api/auth/logout');
+        ])->postJson('api/v1/auth/logout');
 
         // --- Assert ---
         $logoutResponse->assertStatus(200);
