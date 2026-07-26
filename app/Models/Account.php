@@ -46,7 +46,6 @@ class Account extends Model
     {
         return $this->children()
             ->with([
-                'accountType',
                 'childrenRecursive',
             ]);
     }

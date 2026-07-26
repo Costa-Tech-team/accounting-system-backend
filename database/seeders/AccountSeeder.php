@@ -13,132 +13,59 @@ class AccountSeeder extends Seeder
      */
     public function run(): void
     {
-        $activo = AccountType::where('name', 'Activo')->first();
-        $pasivo = AccountType::where('name', 'Pasivo')->first();
-        $patrimonio = AccountType::where('name', 'Patrimonio Neto')->first();
-        $ingresos = AccountType::where('name', 'Ingresos')->first();
-        $gastos = AccountType::where('name', 'Gastos')->first();
+        $activo = AccountType::where('name', 'Activo')->firstOrFail();
+        $pasivo = AccountType::where('name', 'Pasivo')->firstOrFail();
+        $patrimonio = AccountType::where('name', 'Patrimonio Neto')->firstOrFail();
+        $ingresos = AccountType::where('name', 'Ingresos')->firstOrFail();
+        $gastos = AccountType::where('name', 'Gastos')->firstOrFail();
 
-        // ACTIVO
+        $createAccount = function (string $code, string $name, AccountType $accountType, ?Account $parent = null, bool $isOperable = false): Account {
+            return Account::updateOrCreate(
+                ['code' => $code],
+                [
+                    'account_type_id' => $accountType->id,
+                    'parent_id' => $parent?->id,
+                    'name' => $name,
+                    'is_active' => true,
+                    'is_operable' => $isOperable,
+                ]
+            );
+        };
 
-        $activoRoot = Account::create([
-            'account_type_id' => $activo->id,
-            'code' => '1',
-            'name' => 'Activo',
-            'is_active' => true,
-            'is_operable' => false,
-        ]);
+        $activoRoot = $createAccount('1', 'Activo', $activo);
+        $activoCorriente = $createAccount('1.1', 'Activo Corriente', $activo, $activoRoot);
+        $activoNoCorriente = $createAccount('1.2', 'Activo No Corriente', $activo, $activoRoot);
 
-        $activoCorriente = Account::create([
-            'account_type_id' => $activo->id,
-            'parent_id' => $activoRoot->id,
-            'code' => '1.1',
-            'name' => 'Activo Corriente',
-            'is_active' => true,
-            'is_operable' => false,
-        ]);
+        $createAccount('1.1.1', 'Caja', $activo, $activoCorriente, true);
+        $createAccount('1.1.2', 'Bancos', $activo, $activoCorriente, true);
+        $createAccount('1.1.3', 'Cuentas por Cobrar', $activo, $activoCorriente, true);
+        $createAccount('1.1.4', 'Inventarios', $activo, $activoCorriente, true);
 
-        Account::create([
-            'account_type_id' => $activo->id,
-            'parent_id' => $activoCorriente->id,
-            'code' => '1.1.1',
-            'name' => 'Caja',
-            'is_active' => true,
-            'is_operable' => true,
-        ]);
+        $createAccount('1.2.1', 'Equipos y Mobiliario', $activo, $activoNoCorriente, true);
+        $createAccount('1.2.2', 'Depreciación Acumulada', $activo, $activoNoCorriente, true);
 
-        Account::create([
-            'account_type_id' => $activo->id,
-            'parent_id' => $activoCorriente->id,
-            'code' => '1.1.2',
-            'name' => 'Banco',
-            'is_active' => true,
-            'is_operable' => true,
-        ]);
+        $pasivoRoot = $createAccount('2', 'Pasivo', $pasivo);
+        $pasivoCorriente = $createAccount('2.1', 'Pasivo Corriente', $pasivo, $pasivoRoot);
 
-        // PASIVO
+        $createAccount('2.1.1', 'Proveedores', $pasivo, $pasivoCorriente, true);
+        $createAccount('2.1.2', 'Cuentas por Pagar', $pasivo, $pasivoCorriente, true);
+        $createAccount('2.1.3', 'Impuestos por Pagar', $pasivo, $pasivoCorriente, true);
 
-        $pasivoRoot = Account::create([
-            'account_type_id' => $pasivo->id,
-            'code' => '2',
-            'name' => 'Pasivo',
-            'is_active' => true,
-            'is_operable' => false,
-        ]);
+        $patrimonioRoot = $createAccount('3', 'Patrimonio Neto', $patrimonio);
+        $createAccount('3.1', 'Capital', $patrimonio, $patrimonioRoot, true);
+        $createAccount('3.2', 'Utilidades Retenidas', $patrimonio, $patrimonioRoot, true);
 
-        Account::create([
-            'account_type_id' => $pasivo->id,
-            'parent_id' => $pasivoRoot->id,
-            'code' => '2.1',
-            'name' => 'Proveedores',
-            'is_active' => true,
-            'is_operable' => true,
-        ]);
+        $ingresosRoot = $createAccount('4', 'Ingresos', $ingresos);
+        $createAccount('4.1', 'Ventas', $ingresos, $ingresosRoot, true);
+        $createAccount('4.2', 'Servicios', $ingresos, $ingresosRoot, true);
+        $createAccount('4.3', 'Otros Ingresos', $ingresos, $ingresosRoot, true);
 
-        // PATRIMONIO NETO
-
-        $patrimonioRoot = Account::create([
-            'account_type_id' => $patrimonio->id,
-            'code' => '3',
-            'name' => 'Patrimonio Neto',
-            'is_active' => true,
-            'is_operable' => false,
-        ]);
-
-        Account::create([
-            'account_type_id' => $patrimonio->id,
-            'parent_id' => $patrimonioRoot->id,
-            'code' => '3.1',
-            'name' => 'Capital',
-            'is_active' => true,
-            'is_operable' => true,
-        ]);
-
-        // INGRESOS
-
-        $ingresosRoot = Account::create([
-            'account_type_id' => $ingresos->id,
-            'code' => '4',
-            'name' => 'Ingresos',
-            'is_active' => true,
-            'is_operable' => false,
-        ]);
-
-        Account::create([
-            'account_type_id' => $ingresos->id,
-            'parent_id' => $ingresosRoot->id,
-            'code' => '4.1',
-            'name' => 'Ventas',
-            'is_active' => true,
-            'is_operable' => true,
-        ]);
-
-        // GASTOS
-
-        $gastosRoot = Account::create([
-            'account_type_id' => $gastos->id,
-            'code' => '5',
-            'name' => 'Gastos',
-            'is_active' => true,
-            'is_operable' => false,
-        ]);
-
-        Account::create([
-            'account_type_id' => $gastos->id,
-            'parent_id' => $gastosRoot->id,
-            'code' => '5.1',
-            'name' => 'Servicios',
-            'is_active' => true,
-            'is_operable' => true,
-        ]);
-
-        Account::create([
-            'account_type_id' => $gastos->id,
-            'parent_id' => $gastosRoot->id,
-            'code' => '5.2',
-            'name' => 'Sueldos',
-            'is_active' => true,
-            'is_operable' => true,
-        ]);
+        $gastosRoot = $createAccount('5', 'Gastos', $gastos);
+        $createAccount('5.1', 'Costo de Ventas', $gastos, $gastosRoot, true);
+        $createAccount('5.2', 'Sueldos y Salarios', $gastos, $gastosRoot, true);
+        $createAccount('5.3', 'Alquileres', $gastos, $gastosRoot, true);
+        $createAccount('5.4', 'Servicios Públicos', $gastos, $gastosRoot, true);
+        $createAccount('5.5', 'Publicidad y Marketing', $gastos, $gastosRoot, true);
+        $createAccount('5.6', 'Gastos de Administración', $gastos, $gastosRoot, true);
     }
 }

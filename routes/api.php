@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JournalEntryController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -12,7 +13,7 @@ Route::get('/', function () {
         "message" => "Esta es una API privada para el sistema contable. El acceso a los recursos requiere autenticación.",
         "environment" => app()->environment(),
         "meta" => [
-            "timestamp" => "2026-07-19T22:15:30+00:00",
+            "timestamp" => now()->toIso8601String(),
             "version" => "v1",
             "status" => "online",
         ]
@@ -30,5 +31,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/account', [AccountController::class, 'index']);
         Route::get('/account/{id}', [AccountController::class, 'show']);
         Route::post('/account', [AccountController::class, 'store']);
+        Route::get('/journal-entry', [JournalEntryController::class, 'index']);
+        Route::post('/journal-entry', [JournalEntryController::class, 'store']);
     });
 });

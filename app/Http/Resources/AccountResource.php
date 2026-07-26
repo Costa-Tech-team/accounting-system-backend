@@ -18,13 +18,7 @@ class AccountResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'account_type' => $this->whenLoaded('accountType', function () {
-                return [
-                    'id' => $this->accountType->id,
-                    'name' => $this->accountType->name,
-                    'normal_balance' => $this->accountType->normal_balance,
-                ];
-            }),
+            'account_type' => $this->account_type_id,
             'parent_id' => $this->parent_id,
             'is_active' => $this->is_active,
             'is_operable' => $this->is_operable,
