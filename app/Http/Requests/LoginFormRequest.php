@@ -36,4 +36,21 @@ class LoginFormRequest extends FormRequest
             'password.required' => 'La contraseña es obligatoria.',
         ];
     }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'email' => [
+                'description' => 'User email address.',
+                'example' => 'john@example.com',
+            ],
+            'password' => [
+                'description' => 'User password.',
+                'example' => 'password',
+            ],
+        ];
+    }
 }

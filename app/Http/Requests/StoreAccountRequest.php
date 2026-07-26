@@ -34,6 +34,36 @@ class StoreAccountRequest extends FormRequest
         ];
     }
 
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'Account name.',
+                'example' => 'Cash',
+            ],
+            'code' => [
+                'description' => 'Account code.',
+                'example' => '1.1.1',
+            ],
+            'account_type_id' => [
+                'description' => 'Account type identifier.',
+                'example' => 1,
+            ],
+            'parent_id' => [
+                'description' => 'Parent account identifier.',
+                'example' => 2,
+            ],
+            'is_active' => [
+                'description' => 'Whether the account is active.',
+                'example' => true,
+            ],
+            'is_operable' => [
+                'description' => 'Whether journal entries can be posted to this account.',
+                'example' => true,
+            ],
+        ];
+    } 
+
 
     public function after(): array
     {

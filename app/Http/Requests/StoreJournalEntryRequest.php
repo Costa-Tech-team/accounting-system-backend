@@ -34,6 +34,55 @@ class StoreJournalEntryRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get custom documentation for request body parameters.
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'entry_date' => [
+                'description' => 'Journal entry date.',
+                'example' => '2026-07-26',
+            ],
+    
+            'description' => [
+                'description' => 'Optional description of the journal entry.',
+                'example' => 'Purchase of office supplies.',
+            ],
+    
+            'lines' => [
+                'description' => 'List of journal entry lines. At least two lines are required and the total debit must equal the total credit.',
+                'example' => [
+                    [
+                        'account_id' => 4,
+                        'debit' => 1500.00,
+                        'credit' => 0,
+                    ],
+                    [
+                        'account_id' => 12,
+                        'debit' => 0,
+                        'credit' => 1500.00,
+                    ],
+                ],
+            ],
+    
+            'lines.*.account_id' => [
+                'description' => 'ID of an operable account.',
+                'example' => 4,
+            ],
+    
+            'lines.*.debit' => [
+                'description' => 'Debit amount. Use 0 if this line is a credit.',
+                'example' => 1500.00,
+            ],
+    
+            'lines.*.credit' => [
+                'description' => 'Credit amount. Use 0 if this line is a debit.',
+                'example' => 0,
+            ],
+        ];
+    }
+
     public function after(): array
     {
         return [

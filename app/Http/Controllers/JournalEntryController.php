@@ -10,6 +10,47 @@ use Illuminate\Support\Facades\DB;
 
 class JournalEntryController extends Controller
 {
+    /**
+     * List journal entries
+     *
+     * Returns all journal entries within a date range.
+     *
+     * If no dates are provided, only entries from the current day are returned.
+     *
+     * @group Journal Entries
+     *
+     * @authenticated
+     *
+     * @queryParam start_date date Filter entries from this date. Format: Y-m-d. Example: 2026-07-01
+     * @queryParam end_date date Filter entries until this date. Format: Y-m-d. Example: 2026-07-31
+     *
+     * @response 200 {
+     *   "message": "Asientos obtenidos correctamente.",
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "entry_date": "2026-07-26",
+     *       "description": "Purchase of office supplies",
+     *       "lines": [
+     *         {
+     *           "account_id": 4,
+     *           "debit": 1500,
+     *           "credit": 0
+     *         },
+     *         {
+     *           "account_id": 12,
+     *           "debit": 0,
+     *           "credit": 1500
+     *         }
+     *       ]
+     *     }
+     *   ],
+     *   "meta": {
+     *     "start_date": "2026-07-01T00:00:00Z",
+     *     "end_date": "2026-07-31T23:59:59Z"
+     *   }
+     * }
+     */
     public function index(Request $request)
     {
         $startDate = $request->input('start_date');
@@ -37,6 +78,50 @@ class JournalEntryController extends Controller
         ]);
     }
 
+    /**
+     * Create journal entry
+     *
+     * Creates a new journal entry and all its lines.
+     *
+     * The entry must:
+     * - Contain at least two lines.
+     * - Use operable accounts.
+     * - Be balanced (total debits must equal total credits).
+     *
+     * @group Journal Entries
+     *
+     * @authenticated
+     *
+     * @response 201 {
+     *   "message": "Asiento contable creado correctamente.",
+     *   "data": {
+     *     "id": 1,
+     *     "entry_date": "2026-07-26",
+     *     "description": "Purchase of office supplies",
+     *     "lines": [
+     *       {
+     *         "account_id": 4,
+     *         "debit": 1500,
+     *         "credit": 0
+     *       },
+     *       {
+     *         "account_id": 12,
+     *         "debit": 0,
+     *         "credit": 1500
+     *       }
+     *     ]
+     *   }
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "lines": [
+     *       "El asiento debe estar balanceado: el total de débitos debe ser igual al total de créditos."
+     *     ]
+     *   }
+     * }
+     */
     public function store(StoreJournalEntryRequest $request)
     {
         $data = $request->validated();
