@@ -29,7 +29,7 @@ Route::prefix('/v1')->group(function () {
 
         // Accounting System Core Routes
         Route::get('/account', [AccountController::class, 'index']);
-        Route::get('/account/{id}', [AccountController::class, 'show']);
+        Route::get('/account/{account}', [AccountController::class, 'show']);
         Route::post('/account', [AccountController::class, 'store']);
         Route::get('/journal-entry', [JournalEntryController::class, 'index']);
         Route::post('/journal-entry', [JournalEntryController::class, 'store']);
