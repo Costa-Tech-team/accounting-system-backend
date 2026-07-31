@@ -132,13 +132,7 @@ class JournalEntryController extends Controller
                 'description' => $data['description'] ?? null,
             ]);
 
-            foreach ($data['lines'] as $line) {
-                $entry->lines()->create([
-                    'account_id' => $line['account_id'],
-                    'debit' => $line['debit'],
-                    'credit' => $line['credit'],
-                ]);
-            }
+            $entry->lines()->createMany($data['lines']);
 
             return $entry->load('lines.account');
         });

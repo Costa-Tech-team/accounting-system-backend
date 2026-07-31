@@ -62,7 +62,7 @@ class StoreAccountRequest extends FormRequest
                 'example' => true,
             ],
         ];
-    } 
+    }
 
 
     public function after(): array

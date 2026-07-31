@@ -49,6 +49,7 @@ class LoginFormRequest extends FormRequest
             ],
             'password' => [
                 'description' => 'User password.',
+                'type' => "password",
                 'example' => 'password',
             ],
         ];

@@ -44,12 +44,12 @@ class StoreJournalEntryRequest extends FormRequest
                 'description' => 'Journal entry date.',
                 'example' => '2026-07-26',
             ],
-    
+
             'description' => [
                 'description' => 'Optional description of the journal entry.',
                 'example' => 'Purchase of office supplies.',
             ],
-    
+
             'lines' => [
                 'description' => 'List of journal entry lines. At least two lines are required and the total debit must equal the total credit.',
                 'example' => [
@@ -65,17 +65,17 @@ class StoreJournalEntryRequest extends FormRequest
                     ],
                 ],
             ],
-    
+
             'lines.*.account_id' => [
                 'description' => 'ID of an operable account.',
                 'example' => 4,
             ],
-    
+
             'lines.*.debit' => [
                 'description' => 'Debit amount. Use 0 if this line is a credit.',
                 'example' => 1500.00,
             ],
-    
+
             'lines.*.credit' => [
                 'description' => 'Credit amount. Use 0 if this line is a debit.',
                 'example' => 0,
@@ -93,8 +93,14 @@ class StoreJournalEntryRequest extends FormRequest
                     return;
                 }
 
+                $accountIds = collect($lines)->pluck('account_id')->filter()->unique();
+                $accounts = Account::whereIn('id', $accountIds)->get()->keyBy('id');
+
                 foreach ($lines as $index => $line) {
-                    $account = Account::find($line['account_id'] ?? null);
+                    $accountId = $line['account_id'] ?? null;
+                    $account = $accounts->get($accountId);
+                    $debit = (float) ($line['debit'] ?? 0);
+                    $credit = (float) ($line['credit'] ?? 0);
 
                     if ($account && ! $account->is_operable) {
                         $validator->errors()->add(
@@ -102,10 +108,24 @@ class StoreJournalEntryRequest extends FormRequest
                             'No se puede crear un asiento con una cuenta no operable.'
                         );
                     }
+
+                    if ($debit == 0 && $credit == 0) {
+                        $validator->errors()->add(
+                            "lines.$index",
+                            'La línea debe registrar un valor en débito o en crédito.'
+                        );
+                    }
+
+                    if ($debit > 0 && $credit > 0) {
+                        $validator->errors()->add(
+                            "lines.$index",
+                            'Una misma línea no puede registrar tanto débito como crédito.'
+                        );
+                    }
                 }
 
-                $debitTotal = collect($lines)->sum(fn ($line) => (float) ($line['debit'] ?? 0));
-                $creditTotal = collect($lines)->sum(fn ($line) => (float) ($line['credit'] ?? 0));
+                $debitTotal = collect($lines)->sum(fn($line) => (float) ($line['debit'] ?? 0));
+                $creditTotal = collect($lines)->sum(fn($line) => (float) ($line['credit'] ?? 0));
 
                 if (round($debitTotal, 2) !== round($creditTotal, 2)) {
                     $validator->errors()->add(
