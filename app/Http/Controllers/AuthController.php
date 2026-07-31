@@ -17,7 +17,7 @@ class AuthController extends Controller
      * On success, a new Sanctum access token is generated and returned along
      * with the authenticated user's information.
      *
-     * @group Authentication
+     * @group Authentication With Token
      *
      * @unauthenticated
      *
@@ -64,7 +64,7 @@ class AuthController extends Controller
      *
      * Revoke the current access token and end the authenticated session.
      *
-     * @group Authentication
+     * @group Authentication With Token
      *
      * @authenticated
      *
@@ -90,7 +90,7 @@ class AuthController extends Controller
      *
      * Returns the information of the currently authenticated user.
      *
-     * @group Authentication
+     * @group Authentication With Token
      *
      * @authenticated
      *

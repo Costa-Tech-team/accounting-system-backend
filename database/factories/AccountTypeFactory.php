@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<account_types>
  */
-class AccountTypesFactory extends Factory
+class AccountTypeFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,8 @@ class AccountTypesFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->unique()->word(),
+            'normal_balance' => $this->faker->randomElement(['debit', 'credit']),
         ];
     }
 }

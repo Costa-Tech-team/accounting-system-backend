@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AccountTypesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JournalEntryController;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::prefix('/v1')->group(function () {
         Route::post('auth/logout', [AuthController::class, 'logout']);
 
         // Accounting System Core Routes
+        Route::get('/account-types', [AccountTypesController::class, 'index']);
         Route::get('/account', [AccountController::class, 'index']);
         Route::get('/account/{account}', [AccountController::class, 'show']);
         Route::post('/account', [AccountController::class, 'store']);
