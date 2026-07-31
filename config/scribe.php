@@ -44,7 +44,7 @@ return [
     ## Base URL
 
     ```text
-    http://localhost:8000/api/v1
+    https://accountingsystem.ferchudev.com/api/v1
     ```
 
     ## Request Headers
