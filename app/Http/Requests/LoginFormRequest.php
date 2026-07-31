@@ -18,6 +18,9 @@ class LoginFormRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     *
+     * @bodyParam email string required The user's email. Example: john@example.com
+     * @bodyParam password password required The user's password. Example: secret123
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
